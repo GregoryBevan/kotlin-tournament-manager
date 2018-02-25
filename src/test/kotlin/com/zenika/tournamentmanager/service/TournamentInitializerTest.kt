@@ -1,11 +1,12 @@
-package com.zenika.tournamentmanager
+package com.zenika.tournamentmanager.service
 
 import com.zenika.tournamentmanager.model.Player
 import com.zenika.tournamentmanager.model.Tournament
 import com.zenika.tournamentmanager.model.TournamentType
-import com.zenika.tournamentmanager.service.PLAYERS_MAX_NUMBER
-import com.zenika.tournamentmanager.service.PLAYERS_MIN_NUMBER
-import com.zenika.tournamentmanager.service.TournamentInitializer
+import com.zenika.tournamentmanager.util.prepareSelection
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
 import kotlin.test.*
 
 
@@ -13,17 +14,30 @@ class TournamentInitializerTest {
 
     lateinit var tournamentInitializer: TournamentInitializer
 
+    private lateinit var outStream: ByteArrayOutputStream
+
     @BeforeTest
     fun setup() {
         tournamentInitializer = TournamentInitializer()
+        outStream = ByteArrayOutputStream()
+        System.setOut(PrintStream(outStream))
     }
 
     @Test
     fun should_create_tournament() {
-        Tournament(
-            "test tournament", TournamentType.KNOCKOUT, 4, listOf(
-                Player("John"), Player("Jane")
-            )
+        prepareSelection("Zen Tournament\n1\n2\nGreg\nLeony\n")
+        assertEquals(
+            Tournament("My", TournamentType.KNOCKOUT, 2, listOf(Player("Greg"), Player("Leony"))),
+            tournamentInitializer.initialize()
+        )
+    }
+
+    @Test
+    fun should_create_tournament_with_default_name() {
+        prepareSelection("\n\n1\n2\nGreg\nLeony\n")
+        assertEquals(
+            Tournament("Your tournament", TournamentType.KNOCKOUT, 2, listOf(Player("Greg"), Player("Leony"))),
+            tournamentInitializer.initialize()
         )
     }
 

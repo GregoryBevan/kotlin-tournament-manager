@@ -5,13 +5,13 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import com.zenika.tournamentmanager.service.TournamentInitializer
+import com.zenika.tournamentmanager.util.prepareSelection
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import java.io.ByteArrayInputStream
 
 class ApplicationTest {
 
@@ -53,10 +53,5 @@ class ApplicationTest {
         Application(tournamentInitializer).handleUserSelection()
 
         verify(tournamentInitializer).initialize()
-    }
-
-    private fun prepareSelection(selection: String) {
-        val inputStream = ByteArrayInputStream(selection.toByteArray())
-        System.setIn(inputStream)
     }
 }

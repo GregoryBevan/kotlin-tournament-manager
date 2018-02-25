@@ -1,17 +1,20 @@
 package com.zenika.tournamentmanager
 
-import org.junit.Assert.*
-import org.junit.Before
-import org.junit.Test
+import com.nhaarman.mockito_kotlin.*
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+
 
 class ApplicationTest {
 
     private lateinit var outStream: ByteArrayOutputStream
     private lateinit var errorStream: ByteArrayOutputStream
 
-    @Before
+    @BeforeTest
     fun setup() {
         outStream = ByteArrayOutputStream()
         System.setOut(PrintStream(outStream))
@@ -21,41 +24,41 @@ class ApplicationTest {
 
     @Test
     fun menu_should_be_displayed() {
-        displayMenu()
+        Application().displayMenu()
         assertEquals(MAIN_MENU, outStream.toString())
     }
 
     @Test
     fun selection_should_not_be_null() {
-        handleMenuSelection(null)
+        Application().handleMenuSelection(null)
         assertEquals(SELECTION_ERROR_MESSAGE, errorStream.toString())
     }
 
     @Test
     fun selection_should_not_be_an_int() {
-        handleMenuSelection("Zenika")
+        Application().handleMenuSelection("Zenika")
         assertEquals(SELECTION_ERROR_MESSAGE, errorStream.toString())
     }
 
     @Test
     fun selection_should_be_an_int_between_0_and_1() {
-        handleMenuSelection("-1")
+        Application().handleMenuSelection("-1")
         assertEquals(SELECTION_ERROR_MESSAGE, errorStream.toString())
     }
 
     @Test
     fun should_exit_if_selection_0() {
-        handleMenuSelection("0")
+        Application().handleMenuSelection("0")
         assertTrue(exit)
     }
 
     @Test
     fun should_start_new_tournament_if_selection_0() {
-        handleMenuSelection("1")
-        assertEquals("""
-$TOURNAMENT_TITLE
+        val tournamentInitializer = mock<TournamentInitializer>()
+        doNothing().whenever(tournamentInitializer).initialize()
 
-$TOURNAMENT_NAME_MESSAGE
-        """.trimMargin(), outStream.toString())
+        Application(tournamentInitializer).handleMenuSelection("1")
+
+        verify(tournamentInitializer).initialize()
     }
 }

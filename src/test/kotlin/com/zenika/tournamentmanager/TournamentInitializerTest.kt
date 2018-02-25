@@ -1,5 +1,11 @@
 package com.zenika.tournamentmanager
 
+import com.zenika.tournamentmanager.model.Player
+import com.zenika.tournamentmanager.model.Tournament
+import com.zenika.tournamentmanager.model.TournamentType
+import com.zenika.tournamentmanager.service.PLAYERS_MAX_NUMBER
+import com.zenika.tournamentmanager.service.PLAYERS_MIN_NUMBER
+import com.zenika.tournamentmanager.service.TournamentInitializer
 import kotlin.test.*
 
 
@@ -14,7 +20,11 @@ class TournamentInitializerTest {
 
     @Test
     fun should_create_tournament() {
-        Tournament("test tournament", TournamentType.KNOCKOUT, 4, listOf(Player("John"), Player("Jane")))
+        Tournament(
+            "test tournament", TournamentType.KNOCKOUT, 4, listOf(
+                Player("John"), Player("Jane")
+            )
+        )
     }
 
     @Test

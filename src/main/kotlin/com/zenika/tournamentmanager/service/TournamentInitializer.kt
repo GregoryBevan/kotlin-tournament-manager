@@ -1,4 +1,9 @@
-package com.zenika.tournamentmanager
+package com.zenika.tournamentmanager.service
+
+import com.zenika.tournamentmanager.model.DEFAULT_TOURNAMENT_NAME
+import com.zenika.tournamentmanager.model.Player
+import com.zenika.tournamentmanager.model.Tournament
+import com.zenika.tournamentmanager.model.TournamentType
 
 const val TOURNAMENT_TITLE = """
         === NEW TOURNAMENT ==="""
@@ -15,7 +20,7 @@ const val PLAYERS_MAX_NUMBER = 32
 
 class TournamentInitializer {
 
-    fun initialize() {
+    fun initialize(): Tournament {
         println(TOURNAMENT_TITLE)
 
         val tournamentName = selectTournamentName()
@@ -23,18 +28,15 @@ class TournamentInitializer {
         val numberOfPlayers = selectNumberOfPlayers()
         val players = addPlayers(numberOfPlayers)
 
-        val tournament = Tournament(tournamentName, tournamentType, numberOfPlayers, players)
-
-        println(tournament)
-
+        return Tournament(tournamentName, tournamentType, numberOfPlayers, players)
     }
 
-    fun selectTournamentName(): String {
+    private fun selectTournamentName(): String {
         print(TOURNAMENT_NAME_MESSAGE)
         return readLine()?.takeIf { it.isNotEmpty() } ?: DEFAULT_TOURNAMENT_NAME
     }
 
-    fun selectTournamentType(): TournamentType {
+    private fun selectTournamentType(): TournamentType {
         print(TOURNAMENT_TYPE_MESSAGE)
         var tournamentType: TournamentType? = null
         while (tournamentType === null) {
@@ -43,7 +45,7 @@ class TournamentInitializer {
         return tournamentType
     }
 
-    fun selectNumberOfPlayers(): Int {
+    private fun selectNumberOfPlayers(): Int {
         var numberOfPlayers: Int? = null
         while (numberOfPlayers === null) {
             print(NUMBER_OF_PLAYERS_MESSAGE)
@@ -53,12 +55,12 @@ class TournamentInitializer {
         return numberOfPlayers
     }
 
-    fun addPlayers(numberOfPlayers: Int): List<Player> {
+    private fun addPlayers(numberOfPlayers: Int): List<Player> {
         println(PLAYERS_TITLE)
         return (1..numberOfPlayers).map { addPlayer(it) }
     }
 
-    fun addPlayer(number: Int): Player {
+    private fun addPlayer(number: Int): Player {
         var pseudo: String? = null
         while (pseudo === null) {
             print(ADD_PLAYER_MESSAGE.format(number))

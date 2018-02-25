@@ -1,25 +1,21 @@
 package com.zenika.tournamentmanager
 
+import com.zenika.tournamentmanager.menu.MainMenuDisplayer
+import com.zenika.tournamentmanager.service.TournamentInitializer
+
 const val TITLE = """
-        === Zen Tournament Manager ==="""
+        === Zen Tournament Manager ===
 
-const val MAIN_MENU = """
-
-1 - Start new tournament
-0 - Exit
-Enter your selection : """
+        """
 
 const val SELECTION_ERROR_MESSAGE = "Choice must be a number between 0 or 1"
 
 var exit = false
 
-class Application(private val tournamentInitializer:TournamentInitializer = TournamentInitializer()) {
-    fun displayMenu() {
-        print(MAIN_MENU)
-    }
+class Application(private val tournamentInitializer: TournamentInitializer = TournamentInitializer()) {
 
-    fun handleMenuSelection(input: String?) {
-        val selection = input?.toIntOrNull()
+    fun handleUserSelection() {
+        val selection = readLine()?.toIntOrNull()
         when (selection) {
             0 -> exit = true
             1 -> tournamentInitializer.initialize()
@@ -32,8 +28,7 @@ fun main(args: Array<String>) {
     val application = Application()
     println(TITLE)
     while (!exit) {
-        application.displayMenu()
-        val input = readLine()
-        application.handleMenuSelection(input)
+        MainMenuDisplayer.displayMenuSelection()
+        application.handleUserSelection()
     }
 }
